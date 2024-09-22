@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate(); // Hook to navigate programmatically
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+            
+            // Store token in localStorage
             localStorage.setItem('token', response.data.token);
-            alert('Logged in successfully');
+
+            // Navigate to home page or dashboard after login
+            navigate('/');
+
+            // Clear any previous error
             setError('');
         } catch (error) {
             setError('Invalid email or password');
@@ -63,8 +71,6 @@ const Login = () => {
 
                                 {/* Submit Button */}
                                 <button type="submit" className="btn btn-primary w-100">Login</button>
-
-                                
                             </form>
                         </div>
                     </div>

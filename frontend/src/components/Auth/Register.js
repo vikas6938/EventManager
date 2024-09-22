@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -7,6 +8,8 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    
+    const navigate = useNavigate(); // Initialize the useNavigate hook
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,8 +21,18 @@ const Register = () => {
             setName('');
             setEmail('');
             setPassword('');
+
+            // Redirect to the login page or home page after success
+            setTimeout(() => {
+                navigate('/login'); // Redirect to login page after successful registration
+            }, 1500); // Optional: add a small delay before redirecting
         } catch (error) {
-            setError('Registration failed. Please try again.');
+            // Check if the error response is available and display the correct error
+            if (error.response) {
+                setError(error.response.data.message || 'Registration failed. Please try again.');
+            } else {
+                setError('An unknown error occurred. Please try again.');
+            }
         }
     };
 
